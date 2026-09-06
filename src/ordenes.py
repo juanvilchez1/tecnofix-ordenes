@@ -8,6 +8,16 @@ ESTADOS_ORDEN = [
 ]
 
 
+TRANSICIONES_PERMITIDAS = {
+    "Recibido": ["En diagnóstico", "Cancelado"],
+    "En diagnóstico": ["En reparación", "Cancelado"],
+    "En reparación": ["Listo para retirar", "Cancelado"],
+    "Listo para retirar": ["Entregado"],
+    "Entregado": [],
+    "Cancelado": [],
+}
+
+
 def validar_datos_orden(cliente, dispositivo, falla_reportada):
     """Valida los campos obligatorios de una orden de reparación."""
     errores = []
@@ -27,3 +37,9 @@ def validar_datos_orden(cliente, dispositivo, falla_reportada):
 def estado_valido(estado):
     """Comprueba si el estado pertenece a la lista permitida."""
     return estado in ESTADOS_ORDEN
+
+
+def transicion_valida(estado_actual, estado_nuevo):
+    """Comprueba si el cambio de estado está permitido."""
+    opciones = TRANSICIONES_PERMITIDAS.get(estado_actual, [])
+    return estado_nuevo in opciones
